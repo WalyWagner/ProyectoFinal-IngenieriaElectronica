@@ -1,4 +1,4 @@
-# Proyecto Final de Ingenieria Electronica
+# Proyecto Final de Ingeniería Electrónica
 
 ## Medidor de fuerza de impacto y tiempo de respuesta para deportes de combate
 
@@ -6,7 +6,7 @@
 **Departamento:** Departamento de Sistemas e Informatica  
 **Institucion:** Facultad de Ciencias Exactas, Ingenieria y Agrimensura  
 
-Firmware y recursos web del prototipo de Walter Sebastian Wagner. El sistema adquiere una celda de carga mediante un HX711, detecta el pico de impacto y ofrece una interfaz web local para analizar los ensayos.
+Firmware y recursos web del prototipo. El sistema adquiere una celda de carga mediante un HX711, detecta el pico de impacto y ofrece una interfaz web local para analizar los ensayos.
 
 ## Caracteristicas principales
 
