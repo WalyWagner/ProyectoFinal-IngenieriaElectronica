@@ -1,26 +1,24 @@
 # Proyecto Final de Ingenieria Electronica
 
-## Desarrollo de un instrumento medidor de fuerza de impacto y tiempo de respuesta para deportes de combate
+## Medidor de fuerza de impacto y tiempo de respuesta para deportes de combate
 
 **Autor:** Walter Sebastian Wagner  
 **Departamento:** Departamento de Sistemas e Informatica  
 **Institucion:** Facultad de Ciencias Exactas, Ingenieria y Agrimensura  
 
-Firmware y recursos web del prototipo desarrollado para el Proyecto Final de Ingenieria Electronica. El sistema adquiere la senal de una celda de carga mediante un HX711, conserva los ensayos realizados y ofrece una interfaz web local para iniciar mediciones y analizar sus resultados.
+Firmware y recursos web del prototipo de Walter Sebastian Wagner. El sistema adquiere una celda de carga mediante un HX711, detecta el pico de impacto y ofrece una interfaz web local para analizar los ensayos.
 
-> **Estado:** prototipo en desarrollo. Los valores deben interpretarse como resultados experimentales hasta completar la calibracion, validacion y caracterizacion metrologica.
-
-## Caracteristicas
+## Caracteristicas principales
 
 - ESP32 DOIT DevKit V1 con framework Arduino.
 - Adquisicion mediante HX711, canal A y ganancia 128.
 - Ventana de medicion de 3000 ms y hasta 500 muestras por ensayo.
-- Conservacion en memoria de los ultimos cinco ensayos.
+- Conservacion en memoria de los ultimos cinco ensayos, hasta 500 muestras cada uno.
 - Deteccion del pico de impacto y calculo de fuerza estimada en newtons.
 - Indicacion de estado mediante LED rojo y verde.
 - Inicio por pulsador fisico o desde la interfaz web.
 - Punto de acceso Wi-Fi local y servidor HTTP en `192.168.4.1`.
-- Interfaz con graficos SVG, tabla de muestras y logos institucionales en LittleFS.
+- Interfaz con graficos SVG, tabla de muestras y logos en LittleFS.
 
 ## Arquitectura
 
@@ -34,7 +32,7 @@ principal.cpp
   ServidorWeb               Publica la interfaz y los resultados
 ```
 
-Los parametros de hardware, adquisicion y conversion se encuentran en `src/configuracion/ConfiguracionMedicion.h`. La configuracion del punto de acceso se encuentra en `src/configuracion/ConfiguracionWifi.h`.
+Los parametros de hardware, adquisicion, conversion y Wi-Fi se encuentran en `src/configuracion/`.
 
 ## Conexion de hardware
 
@@ -46,14 +44,13 @@ Los parametros de hardware, adquisicion y conversion se encuentran en `src/confi
 | LED rojo | 23 |
 | Pulsador | 32 |
 
-El pulsador usa `INPUT_PULLUP` y es activo en nivel bajo. La configuracion actual contempla una celda de 500 kg y sensibilidad de 2 mV/V. Estos valores deben coincidir con el hardware instalado y con la calibracion realizada.
+El pulsador usa `INPUT_PULLUP` y es activo en nivel bajo. La celda configurada es de 500 kg y 2 mV/V; estos valores deben coincidir con el hardware y la calibracion.
 
-## Preparacion y compilacion
+## Compilar, cargar y usar
 
-1. Instalar Visual Studio Code con PlatformIO.
-2. Abrir esta carpeta como proyecto PlatformIO.
-3. Revisar pines, sensibilidad y parametros de conversion.
-4. Cambiar la red y la contrasena en `src/configuracion/ConfiguracionWifi.h` antes de distribuir el firmware.
+1. Abrir esta carpeta con Visual Studio Code y PlatformIO.
+2. Revisar pines y parametros de conversion.
+3. Cambiar la red y la contrasena en `src/configuracion/ConfiguracionWifi.h` antes de distribuir el firmware.
 
 ```text
 pio run
@@ -61,22 +58,11 @@ pio run --target upload
 pio run --target uploadfs
 ```
 
-`uploadfs` carga los logos de `data/` en LittleFS. El puerto serie informa la red creada y la direccion IP al iniciar la placa.
-
-## Uso
-
-1. Encender el ESP32 y esperar la inicializacion.
-2. Conectar el dispositivo de consulta a la red Wi-Fi `ProyectoFinal`.
-3. Abrir `http://192.168.4.1`.
-4. Iniciar un ensayo desde la pagina o mediante el pulsador.
-5. Aplicar el impacto durante la ventana de adquisicion.
-6. Consultar pico, tiempo, grafico y muestras registradas.
-
-El equipo conserva cinco ensayos en memoria volatil. Cuando se supera ese limite descarta el mas antiguo. Al reiniciar la placa, las mediciones se pierden.
+`uploadfs` carga los logos de `data/` en LittleFS. Para usar el equipo, conectar el dispositivo a la red `ProyectoFinal`, abrir `http://192.168.4.1`, iniciar un ensayo desde la web o el pulsador y aplicar el impacto. La IP se informa por puerto serie.
 
 ## Interpretacion y limites
 
-La interfaz muestra lectura cruda, senal en mV/V, instante del pico y fuerza estimada en N. La estimacion depende de la sensibilidad, capacidad, ganancia y calibracion configuradas. No debe utilizarse como medicion certificada sin validacion contra patrones o instrumentos de referencia.
+La interfaz muestra lectura cruda, senal en mV/V, instante del pico y fuerza estimada en N. Los ensayos se almacenan en memoria volatil; al reiniciar la placa se pierden y, al superar cinco, se descarta el mas antiguo. La fuerza requiere calibracion y validacion contra un instrumento de referencia.
 
 ## Estructura
 
@@ -90,8 +76,19 @@ data/                Logos cargados en LittleFS
 platformio.ini       Configuracion de compilacion
 ```
 
-## Autor y estado del repositorio
+## Autor e institucion
 
-Proyecto Final de Ingenieria Electronica de Walter Sebastian Wagner, Departamento de Sistemas e Informatica, Facultad de Ciencias Exactas, Ingenieria y Agrimensura.
+- **Autor:** Walter Sebastian Wagner
+- **Correo:** WAGNE@FCEIA.UNR.EDU.AR
+- **Departamento:** Departamento de Sistemas e Informatica
+- **Institucion:** Facultad de Ciencias Exactas, Ingenieria y Agrimensura
 
-El repositorio se publicara inicialmente como **privado**. No se ha definido una licencia de distribucion.
+## Derechos y licencia
+
+Este repositorio es publico para permitir la consulta del proyecto, pero todos los derechos sobre el codigo, la documentacion y los recursos originales pertenecen a Walter Sebastian Wagner. La autoria no se transfiere por la publicacion del repositorio.
+
+La licencia aplicable se encuentra en [LICENSE](LICENSE). Se prohiben la comercializacion, la venta, el sublicenciamiento, la redistribucion y la creacion de productos o servicios derivados con fines comerciales sin autorizacion previa y por escrito del autor. Para solicitar permiso, escribir a WAGNE@FCEIA.UNR.EDU.AR.
+
+## Descargo de responsabilidad
+
+El proyecto se proporciona "tal cual", sin garantias expresas ni implicitas. El autor no se hace responsable por danos, perdidas, fallas, lesiones o cualquier otro problema que pueda producirse por el uso, la modificacion, la instalacion o la distribucion del proyecto. Toda utilizacion se realiza bajo responsabilidad exclusiva de quien la lleve a cabo.
